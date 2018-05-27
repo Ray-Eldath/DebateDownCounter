@@ -10,8 +10,8 @@ const unsigned char LED_0F[] = {
   0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90, 0x8C, 0xBF, 0xC6, 0xA1, 0x86, 0xFF, 0xbf
 };
 
-unsigned int LED[4] = {0, 0, 1, 0};
-unsigned int countdown = 10;
+unsigned int LED[4] = {0, 1, 2, 0};
+unsigned int countdown = 120;
 
 const int start = 10;
 const int reset = 8;
@@ -24,7 +24,7 @@ const int SCLK = 13;
 const int RCLK = 12;
 const int DIO = 11;
 
-int lastSetValue = 0;
+int lastSetValue = 120;
 
 void bl();
 void toSet() {
@@ -62,9 +62,15 @@ void toSet() {
 
 void poll() {
   // checkpoints:
-  // a - 30s; b - 15s; c - 0s
-  if (countdown == 8)
+  // 1 - start; a - 60s; b - 30s; b - 15s; 0 - 1s, must be 1s!
+  if (countdown == 60)
     sSerial.print('a');
+  else if (countdown == 30)
+    sSerial.print('b');
+  else if (countdown == 15)
+    sSerial.print('c');
+  else if (countdown == 1)
+    sSerial.print('0');
   if (digitalRead(reset) == HIGH) {
     zero();
     toSet();
